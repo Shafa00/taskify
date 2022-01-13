@@ -1,5 +1,6 @@
 package com.taskify.entity;
 
+import com.taskify.utility.TaskStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,7 +30,8 @@ public class Task {
     private String deadline;
 
     @Column(name = "task_status")
-    private String status;
+    @Enumerated(value = EnumType.STRING)
+    private TaskStatus status;
 
     @ManyToOne
     @JoinTable(
