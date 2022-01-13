@@ -35,7 +35,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.jwtService = jwtService;
         super.setAuthenticationManager(authManager);
         //todo
-        super.setFilterProcessesUrl("/login");
+        super.setFilterProcessesUrl("/sign-in");
     }
 
     @Override
