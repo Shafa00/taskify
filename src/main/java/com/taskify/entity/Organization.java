@@ -29,9 +29,6 @@ public class Organization {
     @Column(name = "organization_address")
     private String address;
 
-    @Column(name = "organization_password")
-    private String password;
-
     @OneToMany(mappedBy = "organization")
     private List<User> users;
 
