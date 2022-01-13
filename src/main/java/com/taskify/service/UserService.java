@@ -1,6 +1,5 @@
 package com.taskify.service;
 
-import com.taskify.entity.User;
 import com.taskify.model.user.UserAuthModel;
 import com.taskify.model.user.UserRqModel;
 import com.taskify.model.user.UserRsModel;
