@@ -22,14 +22,14 @@ public abstract class OrganizationMapper {
     public abstract Organization buildOrganization(SignupRqModel signupRqModel);
 
     @AfterMapping
-    void setOrganizationId(@MappingTarget Organization.OrganizationBuilder organization, SignupRqModel signupRqModel) {
+    void setOrganizationId(@MappingTarget Organization.OrganizationBuilder organization) {
         organization.organizationId(UUID.randomUUID().toString());
     }
 
     public abstract User buildUser(SignupRqModel signupRqModel);
 
     @AfterMapping
-    void setUserId(@MappingTarget User.UserBuilder user, SignupRqModel signupRqModel) {
+    void setUserId(@MappingTarget User.UserBuilder user) {
         user.userId(UUID.randomUUID().toString());
     }
 

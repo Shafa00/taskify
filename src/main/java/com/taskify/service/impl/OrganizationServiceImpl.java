@@ -13,6 +13,7 @@ import com.taskify.repository.UserRepository;
 import com.taskify.service.OrganizationService;
 import com.taskify.utility.MailSenderService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -33,6 +34,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OtpRepository otpRepo;
     private final OrganizationMapper organizationMapper;
     private final MailSenderService mailSenderService;
+    private final BCryptPasswordEncoder encoder;
 
     @Override
     public SignupRsModel signUp(SignupRqModel signupRqModel) throws MessagingException {
@@ -43,6 +45,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         User adminUser = organizationMapper.buildUser(signupRqModel);
         adminUser.setOrganization(organization);
+        adminUser.setPassword(encoder.encode(signupRqModel.getPassword()));
         userRepo.save(adminUser);
 
         String otp = generateOtp();
