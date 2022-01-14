@@ -2,13 +2,16 @@ package com.taskify.service.impl;
 
 import com.taskify.entity.Organization;
 import com.taskify.entity.Otp;
+import com.taskify.entity.Role;
 import com.taskify.entity.User;
+import com.taskify.exception.DataNotFoundException;
 import com.taskify.exception.DuplicateUserException;
 import com.taskify.mapper.OrganizationMapper;
 import com.taskify.model.organization.SignupRqModel;
 import com.taskify.model.organization.SignupRsModel;
 import com.taskify.repository.OrganizationRepository;
 import com.taskify.repository.OtpRepository;
+import com.taskify.repository.RoleRepository;
 import com.taskify.repository.UserRepository;
 import com.taskify.service.OrganizationService;
 import com.taskify.utility.MailSenderService;
@@ -35,6 +38,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationMapper organizationMapper;
     private final MailSenderService mailSenderService;
     private final BCryptPasswordEncoder encoder;
+    private final RoleRepository roleRepo;
 
     @Override
     public SignupRsModel signUp(SignupRqModel signupRqModel) throws MessagingException {
@@ -46,6 +50,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         User adminUser = organizationMapper.buildUser(signupRqModel);
         adminUser.setOrganization(organization);
         adminUser.setPassword(encoder.encode(signupRqModel.getPassword()));
+
+        adminUser.setRole(getRole());
+
         userRepo.save(adminUser);
 
         String otp = generateOtp();
@@ -70,5 +77,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private String generateOtp() {
         return Integer.toString(new Random().nextInt(99999 - 10000) + 10000);
+    }
+
+    private Role getRole() {
+        return roleRepo.findByName("ADMIN").orElseThrow(() -> new DataNotFoundException("Role not found"));
     }
 }
