@@ -35,6 +35,9 @@ public class User {
     @Column(name = "user_email")
     private String email;
 
+    @Column(name = "user_status")
+    private String status;
+
     @OneToOne(mappedBy = "user")
     private Role role;
 

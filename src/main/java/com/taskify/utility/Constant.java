@@ -9,5 +9,6 @@ public class Constant {
     public static final String OTP_CONFIRMATION_BODY = "Your confirmation code is: %s";
     public static final String STATUS_NEW = "NEW";
     public static final String STATUS_USED = "USED";
+    public static final String STATUS_ACTIVE = "ACTIVE";
 
 }

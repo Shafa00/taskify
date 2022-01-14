@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.taskify.utility.Constant.STATUS_ACTIVE;
+
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,12 +21,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserAuthModel> findAuthModelByEmail(String email) {
-        return userRepo.findByEmail(email).map(UserAuthModel::new);
+        return userRepo.findByEmailAndStatus(email, STATUS_ACTIVE).map(UserAuthModel::new);
     }
 
     @Override
     public Optional<UserAuthModel> findById(long id) {
-        return userRepo.findById(id).map(UserAuthModel::new);
+        return userRepo.findByIdAndStatus(id, STATUS_ACTIVE).map(UserAuthModel::new);
     }
 
     @Override

@@ -34,6 +34,8 @@ public class OtpServiceImpl implements OtpService {
         if (otp.getUser().getEmail().equals(otpRequestModel.getEmail())) {
             User user = userByOtp(otp);
             updateOtpAndUserValues(otp, user);
+            user.setStatus(STATUS_ACTIVE);
+            userRepo.save(user);
 
             return OtpMapper.OTP_MAPPER_INSTANCE.buildOtpResponseModel(otp, user);
         } else {
