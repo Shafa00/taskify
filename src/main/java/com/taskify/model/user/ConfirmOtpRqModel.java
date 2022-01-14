@@ -1,16 +1,20 @@
 package com.taskify.model.user;
 
+import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserLoginModel {
+public class ConfirmOtpRqModel {
+    @NotNull
     String email;
-    String password;
+
+    @NotNull
+    String otp;
 }

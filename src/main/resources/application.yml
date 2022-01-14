@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: taskify
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  liquibase:
+    enabled: true
+    change-log: classpath:liquibase/changelog-master.yml
+    drop-first: false
+    default-schema: public
+    database-change-log-table: dbchangelog
+    database-change-log-lock-table: dbchangeloglock
+
+  mail:
+    host: smtp.gmail.com
+    username: sefammmdv00@gmail.com
+    password: ngokrvtyyhcrrquv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+          starttls:
+            enable: true
+
+
+server:
+  port: 8090
+

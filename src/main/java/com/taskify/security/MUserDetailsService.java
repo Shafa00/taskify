@@ -21,16 +21,16 @@ public class MUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
     public static UserDetails map(UserAuthModel userAuthModel) {
-        return new MUserDetails(userAuthModel.getId(), userAuthModel.getUsername(), userAuthModel.getPassword(),
+        return new MUserDetails(userAuthModel.getId(), userAuthModel.getEmail(), userAuthModel.getPassword(),
                 (Collection<? extends GrantedAuthority>) userAuthModel.getRole());
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userService.findAuthModelByUsername(username)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userService.findAuthModelByEmail(email)
                 .map(MUserDetailsService::map)
                 .orElseThrow(() -> {
-                    String message = String.format(USER_NOT_FOUND_MSG, username);
+                    String message = String.format(USER_NOT_FOUND_MSG, email);
                     log.warn(message);
                     return new UsernameNotFoundException(message);
                 });

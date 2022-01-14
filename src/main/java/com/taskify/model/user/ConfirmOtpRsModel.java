@@ -3,14 +3,18 @@ package com.taskify.model.user;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@NoArgsConstructor
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserLoginModel {
+public class ConfirmOtpRsModel {
     String email;
-    String password;
+    String otpId;
+    String otpStatus;
+    LocalDateTime otpCreationDateTime;
 }

@@ -47,4 +47,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Task> tasks;
+
+    @OneToOne(mappedBy = "user")
+    private Otp otp;
 }

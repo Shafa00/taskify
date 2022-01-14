@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
+                .antMatchers(HttpMethod.POST, "/confirm-otp").permitAll()
                 .antMatchers(HttpMethod.POST, "/sign-in").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    Optional<UserAuthModel> findAuthModelByUsername(String username);
+    Optional<UserAuthModel> findAuthModelByEmail(String email);
     Optional<UserAuthModel> findById(long id);
     UserRsModel addUser(UserRqModel userRqModel);
     List<UserRsModel> getUsers();

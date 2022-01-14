@@ -17,7 +17,7 @@ import java.util.Optional;
 import static com.taskify.utility.Constant.JWT_HEADER;
 import static com.taskify.utility.Constant.JWT_PREFIX;
 
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:jwt.properties")
 @Service
 @NoArgsConstructor
 @AllArgsConstructor

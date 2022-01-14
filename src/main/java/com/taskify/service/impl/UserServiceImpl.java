@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
 
     @Override
-    public Optional<UserAuthModel> findAuthModelByUsername(String username) {
-        return userRepo.findByUsername(username).map(UserAuthModel::new);
+    public Optional<UserAuthModel> findAuthModelByEmail(String email) {
+        return userRepo.findByEmail(email).map(UserAuthModel::new);
     }
 
     @Override

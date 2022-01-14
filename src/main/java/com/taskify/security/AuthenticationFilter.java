@@ -46,7 +46,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             return getAuthenticationManager()
                     .authenticate(
                             new UsernamePasswordAuthenticationToken(
-                                    login.getUsername(), login.getPassword()));
+                                    login.getEmail(), login.getPassword()));
         } catch (IOException e) {
             throw new InvalidModelException(INVALID_REQUEST_MODEL_MSG);
         }
@@ -55,15 +55,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
-        String username = ((UserDetails) authResult.getPrincipal()).getUsername();
+        String email = ((UserDetails) authResult.getPrincipal()).getUsername();
 
-        UserAuthModel userAuthModel = userService.findAuthModelByUsername(username).orElseThrow(() ->
-                new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username)));
+        UserAuthModel userAuthModel = userService.findAuthModelByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
 
         String token = jwtService.generateToken(userAuthModel.getId());
 
         generateResponse(response, HttpStatus.OK, String.format(JWT_TOKEN_FORMAT, JWT_PREFIX, token));
-        logger.info(String.format(JWT_TOKEN_GENERATED_MSG, userAuthModel.getUsername()));
+        logger.info(String.format(JWT_TOKEN_GENERATED_MSG, userAuthModel.getEmail()));
     }
 
     @Override

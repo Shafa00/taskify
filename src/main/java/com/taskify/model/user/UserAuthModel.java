@@ -24,13 +24,13 @@ import java.util.Set;
 public class UserAuthModel {
 
     long id;
-    String username;
+    String email;
     String password;
     Role role;
 
     public UserAuthModel(User user) {
         this.id = user.getId();
-        this.username = user.getUsername();
+        this.email = user.getEmail();
         this.password = user.getPassword();
         this.role = user.getRole();
     }
