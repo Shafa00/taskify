@@ -1,9 +1,6 @@
 package com.taskify.mapper;
 
-import com.taskify.entity.Organization;
 import com.taskify.entity.User;
-import com.taskify.model.organization.SignupRqModel;
-import com.taskify.model.organization.SignupRsModel;
 import com.taskify.model.user.UserRqModel;
 import com.taskify.model.user.UserRsModel;
 import org.mapstruct.*;
@@ -23,6 +20,7 @@ public abstract class UserMapper {
         user.userId(UUID.randomUUID().toString());
     }
 
+    @Mapping(target = "organizationId", source = "organization.organizationId")
     public abstract UserRsModel buildUserRsModel(User user);
 
 
