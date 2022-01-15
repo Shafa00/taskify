@@ -22,7 +22,7 @@ public class MUserDetailsService implements UserDetailsService {
 
     public static UserDetails map(UserAuthModel userAuthModel) {
         return new MUserDetails(userAuthModel.getId(), userAuthModel.getEmail(), userAuthModel.getPassword(),
-                (Collection<? extends GrantedAuthority>) userAuthModel.getRole());
+                userAuthModel.getRoles());
     }
 
     @Override

@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@ToString
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

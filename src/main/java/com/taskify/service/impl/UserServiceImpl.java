@@ -1,5 +1,6 @@
 package com.taskify.service.impl;
 
+import com.taskify.entity.Organization;
 import com.taskify.entity.Role;
 import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
         checkEmailUniqueness(userRqModel.getEmail());
         User user = UserMapper.USER_MAPPER_INSTANCE.buildUser(userRqModel);
         user.setPassword(encoder.encode(userRqModel.getPassword()));
-        user.setRole(getRole());
+        user.setRoles(Collections.singletonList(getRole()));
         userRepo.save(user);
 
         // todo implement organization relation

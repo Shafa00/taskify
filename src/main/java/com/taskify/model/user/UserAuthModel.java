@@ -1,6 +1,5 @@
 package com.taskify.model.user;
 
-import com.taskify.entity.Role;
 import com.taskify.entity.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,12 +25,12 @@ public class UserAuthModel {
     long id;
     String email;
     String password;
-    Role role;
+    Set<RoleAuthModel> roles = new HashSet<>();
 
     public UserAuthModel(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.password = user.getPassword();
-        this.role = user.getRole();
+        user.getRoles().forEach(role -> roles.add(new RoleAuthModel(role)));
     }
 }

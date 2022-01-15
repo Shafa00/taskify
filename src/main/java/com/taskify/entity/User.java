@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,8 +39,13 @@ public class User {
     @Column(name = "user_status")
     private String status;
 
-    @OneToOne(mappedBy = "user")
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "rel_user_role",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+    private List<Role> roles;
 
     @ManyToOne
     @JoinTable(
@@ -49,6 +55,7 @@ public class User {
     private Organization organization;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Task> tasks;
 
     @OneToOne(mappedBy = "user")

@@ -32,7 +32,7 @@ public class Otp {
 
     @OneToOne
     @JoinTable(
-            name = "rel_otp_with_user",
+            name = "rel_otp_user",
             joinColumns = {@JoinColumn(name = "otp_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")} )
     User user;

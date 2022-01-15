@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final RoleRepository roleRepo;
 
     @Override
-    public SignupRsModel signUp(SignupRqModel signupRqModel) throws MessagingException {
+    public SignupRsModel signup(SignupRqModel signupRqModel) throws MessagingException {
         checkUsernameAndEmailUniqueness(signupRqModel.getUsername(), signupRqModel.getEmail());
 
         Organization organization = organizationMapper.buildOrganization(signupRqModel);
@@ -51,7 +52,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         adminUser.setOrganization(organization);
         adminUser.setPassword(encoder.encode(signupRqModel.getPassword()));
 
-        adminUser.setRole(getRole());
+        adminUser.setRoles(Collections.singletonList(getRole()));
 
         userRepo.save(adminUser);
 

@@ -1,20 +1,29 @@
 package com.taskify.security;
 
+import com.taskify.model.user.RoleAuthModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
-@AllArgsConstructor
 public class MUserDetails implements UserDetails {
 
     private final long id;
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> roles;
+
+    public MUserDetails(long id, String username, String password, Set<RoleAuthModel> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.roles = roles.stream().map(r -> (GrantedAuthority) r::getName).collect(Collectors.toList());
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

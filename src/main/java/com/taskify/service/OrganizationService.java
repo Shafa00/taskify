@@ -6,5 +6,5 @@ import com.taskify.model.organization.SignupRsModel;
 import javax.mail.MessagingException;
 
 public interface OrganizationService {
-    SignupRsModel signUp(SignupRqModel signUpRqModel) throws MessagingException;
+    SignupRsModel signup(SignupRqModel signUpRqModel) throws MessagingException;
 }

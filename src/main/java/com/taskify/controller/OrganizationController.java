@@ -26,7 +26,7 @@ public class OrganizationController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseModel<SignupRsModel>> signUp(@RequestBody SignupRqModel signupRqModel) throws MessagingException {
-        return ResponseEntity.ok(ResponseModel.of(organizationService.signUp(signupRqModel), HttpStatus.CREATED));
+        return ResponseEntity.ok(ResponseModel.of(organizationService.signup(signupRqModel), HttpStatus.CREATED));
     }
 
     @PostMapping("/confirm-otp")
