@@ -4,6 +4,8 @@ import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,4 +21,6 @@ public class TaskRqModel {
     String deadline;
     @NotNull
     String status;
+    @NotNull
+    List<String> userIds;
 }

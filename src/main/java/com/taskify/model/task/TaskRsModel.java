@@ -3,6 +3,8 @@ package com.taskify.model.task;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,4 +18,5 @@ public class TaskRsModel {
     String description;
     String deadline;
     String status;
+    List<String> userIds;
 }

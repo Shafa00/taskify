@@ -54,9 +54,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
     private Organization organization;
 
-    @OneToMany(mappedBy = "user")
-    @ToString.Exclude
-    private List<Task> tasks;
+    @ManyToOne
+    @JoinTable(
+            name = "rel_task_user",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    private Task task;
 
     @OneToOne(mappedBy = "user")
     private Otp otp;

@@ -4,6 +4,7 @@ import com.taskify.utility.TaskStatus;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,12 +35,8 @@ public class Task {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus status;
 
-    @ManyToOne
-    @JoinTable(
-            name = "rel_task_user",
-            joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private User user;
+    @OneToMany(mappedBy = "task")
+    private List<User> users;
 
     @ManyToOne
     @JoinTable(
