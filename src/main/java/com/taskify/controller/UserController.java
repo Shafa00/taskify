@@ -1,6 +1,7 @@
 package com.taskify.controller;
 
 import com.taskify.model.ResponseModel;
+import com.taskify.model.user.UserLoginModel;
 import com.taskify.model.user.UserRqModel;
 import com.taskify.model.user.UserRsModel;
 import com.taskify.service.UserService;
@@ -32,6 +33,12 @@ import static com.taskify.utility.UrlConstant.*;
 @Log4j2
 public class UserController {
     private final UserService userService;
+
+    @ApiOperation("Login")
+    @PostMapping("/login")
+    public ResponseEntity<?> loginForDocumentation(@RequestBody UserLoginModel userLoginModel) {
+        return ResponseEntity.ok("");
+    }
 
     @ApiOperation("Add user")
     @PostMapping(ADD_USER_URL)
