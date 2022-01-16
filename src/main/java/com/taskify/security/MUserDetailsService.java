@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collection;
 
+import static com.taskify.utility.MessageConstant.USER_NOT_FOUND_BY_EMAIL_MSG;
 import static com.taskify.utility.MessageConstant.USER_NOT_FOUND_MSG;
 
 @Configuration
@@ -30,7 +31,7 @@ public class MUserDetailsService implements UserDetailsService {
         return userService.findAuthModelByEmail(email)
                 .map(MUserDetailsService::map)
                 .orElseThrow(() -> {
-                    String message = String.format(USER_NOT_FOUND_MSG, email);
+                    String message = String.format(USER_NOT_FOUND_BY_EMAIL_MSG, email);
                     log.warn(message);
                     return new UsernameNotFoundException(message);
                 });

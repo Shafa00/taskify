@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 public class UserRqModel {
     @ApiModelProperty(name = "password", dataType = "string")
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 20, min = 6)
     String password;
 
     @ApiModelProperty(name = "name", dataType = "string")

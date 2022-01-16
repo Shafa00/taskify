@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import static com.taskify.utility.Constant.*;
 import static com.taskify.utility.MessageConstant.*;
-import static com.taskify.utility.UrlConstant.SIGN_IN_URL;
+import static com.taskify.utility.UrlConstant.LOGIN_URL;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final UserService userService;
@@ -35,7 +35,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.userService = userService;
         this.jwtService = jwtService;
         super.setAuthenticationManager(authManager);
-        super.setFilterProcessesUrl(SIGN_IN_URL);
+        super.setFilterProcessesUrl(LOGIN_URL);
     }
 
     @Override

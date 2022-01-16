@@ -37,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGNUP_URL).permitAll()
                 .antMatchers(HttpMethod.POST, CONFIRM_OTP_URL).permitAll()
-                .antMatchers(HttpMethod.POST, SIGN_IN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, LOGIN_URL).permitAll()
                 .antMatchers(HttpMethod.POST, ADD_USER_URL).hasRole(UserRole.ADMIN.getRoleName())
 
                 .antMatchers("/h2-console/**").permitAll()

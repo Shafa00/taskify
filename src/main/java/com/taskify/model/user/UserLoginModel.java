@@ -24,6 +24,6 @@ public class UserLoginModel {
 
     @ApiModelProperty(name = "password", dataType = "string")
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 20, min = 6)
     String password;
 }

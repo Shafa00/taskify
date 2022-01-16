@@ -54,6 +54,7 @@ public class OtpServiceImpl implements OtpService {
     private void updateOtpAndUserValues(Otp otp, User user) {
         otp.setStatus(STATUS_USED);
         otpRepo.save(otp);
+        user.setStatus(STATUS_ACTIVE);
         userRepo.save(user);
     }
 
