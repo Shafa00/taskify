@@ -1,8 +1,12 @@
 package com.taskify.model.user;
 
-import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,11 +16,23 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserRqModel {
-    @NotNull
+    @ApiModelProperty(name = "password", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String password;
-    @NotNull
+
+    @ApiModelProperty(name = "name", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String name;
+
+    @ApiModelProperty(name = "surname", dataType = "string")
+    @Size(max = 50)
     String surname;
-    @NotNull
+
+    @ApiModelProperty(name = "email", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
+    @Email(message = "email has invalid format")
     String email;
 }

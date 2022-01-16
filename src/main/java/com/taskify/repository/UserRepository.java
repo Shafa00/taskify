@@ -1,5 +1,6 @@
 package com.taskify.repository;
 
+import com.taskify.entity.Organization;
 import com.taskify.entity.Otp;
 import com.taskify.entity.Role;
 import com.taskify.entity.User;
@@ -21,6 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByOtp(Otp otp);
 
-    Optional<User> findByRolesIn(List<Role> roles);
+    List<User> findAllByOrganization(Organization organization);
 
 }

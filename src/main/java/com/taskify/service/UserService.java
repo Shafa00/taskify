@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface UserService {
     Optional<UserAuthModel> findAuthModelByEmail(String email);
     Optional<UserAuthModel> findById(long id);
-    UserRsModel addUser(UserRqModel userRqModel);
-    List<UserRsModel> getUsers();
+    UserRsModel addUser(UserRqModel userRqModel, String adminEmail);
+    List<UserRsModel> getUsersOfOrganization(String email);
 
 }

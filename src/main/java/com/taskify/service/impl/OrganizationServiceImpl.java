@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Random;
@@ -41,6 +42,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final BCryptPasswordEncoder encoder;
     private final RoleRepository roleRepo;
 
+    @Transactional
     @Override
     public SignupRsModel signup(SignupRqModel signupRqModel) throws MessagingException {
         checkUsernameAndEmailUniqueness(signupRqModel.getUsername(), signupRqModel.getEmail());
@@ -51,19 +53,12 @@ public class OrganizationServiceImpl implements OrganizationService {
         User adminUser = organizationMapper.buildUser(signupRqModel);
         adminUser.setOrganization(organization);
         adminUser.setPassword(encoder.encode(signupRqModel.getPassword()));
-
         adminUser.setRoles(Collections.singletonList(getRole()));
-
         userRepo.save(adminUser);
 
         String otp = generateOtp();
-        otpRepo.save(Otp.builder()
-                .otpId(UUID.randomUUID().toString())
-                .otp(otp)
-                .status(STATUS_NEW)
-                .dateTime(LocalDateTime.now())
-                .user(adminUser)
-                .build());
+        otpRepo.save(buildOtp(otp, adminUser));
+
         mailSenderService
                 .sendEmail(signupRqModel.getEmail(), OTP_CONFIRMATION_SUBJECT,
                         format(OTP_CONFIRMATION_BODY, otp));
@@ -78,6 +73,16 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private String generateOtp() {
         return Integer.toString(new Random().nextInt(99999 - 10000) + 10000);
+    }
+
+    private Otp buildOtp(String otp, User user) {
+        return Otp.builder()
+                .otpId(UUID.randomUUID().toString())
+                .otp(otp)
+                .status(STATUS_NEW)
+                .dateTime(LocalDateTime.now())
+                .user(user)
+                .build();
     }
 
     private Role getRole() {

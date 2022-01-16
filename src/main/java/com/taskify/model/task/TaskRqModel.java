@@ -1,9 +1,11 @@
 package com.taskify.model.task;
 
-import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @AllArgsConstructor
@@ -14,13 +16,28 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TaskRqModel {
-    @NotNull
+    @ApiModelProperty(name = "title", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String title;
-    @NotNull
+
+    @ApiModelProperty(name = "description", dataType = "string")
+    @NotBlank
+    @Size(max = 50)
     String description;
+
+    @ApiModelProperty(name = "deadline", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String deadline;
-    @NotNull
+
+    @ApiModelProperty(name = "userIds", dataType = "List")
+    @NotBlank
+    @Size(max = 50)
     List<String> userIds;
-    @NotNull
+
+    @ApiModelProperty(name = "organizationId", dataType = "string")
+    @NotBlank
+    @Size(max = 50)
     String organizationId;
 }

@@ -1,6 +1,5 @@
 package com.taskify.service.impl;
 
-import com.taskify.entity.Role;
 import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
 import com.taskify.exception.DuplicateUserException;
@@ -15,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,8 +26,6 @@ import static com.taskify.utility.MessageConstant.DUPLICATE_USER_MSG;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
-    private final RoleRepository roleRepo;
-    private final UserMapper userMapper;
     private final BCryptPasswordEncoder encoder;
 
     @Override
@@ -43,23 +39,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserRsModel addUser(UserRqModel userRqModel) {
+    public UserRsModel addUser(UserRqModel userRqModel, String adminEmail) {
+        User adminUser = getAdminUser(adminEmail);
+
         checkEmailUniqueness(userRqModel.getEmail());
+
         User user = UserMapper.USER_MAPPER_INSTANCE.buildUser(userRqModel);
         user.setPassword(encoder.encode(userRqModel.getPassword()));
-        user.setRoles(Collections.singletonList(roleRepo.findByName("USER").orElseThrow(
-                () -> new DataNotFoundException("Role not found"))));
-
-        User adminUser = getAdminUser();
         user.setOrganization(adminUser.getOrganization());
         userRepo.save(user);
 
-        return userMapper.buildUserRsModel(user);
+        return UserMapper.USER_MAPPER_INSTANCE.buildUserRsModel(user);
     }
 
     @Override
-    public List<UserRsModel> getUsers() {
-        return userRepo.findAll().stream()
+    public List<UserRsModel> getUsersOfOrganization(String email) {
+        User adminUser = getAdminUser(email);
+        return userRepo.findAllByOrganization(adminUser.getOrganization()).stream()
                 .map(UserMapper.USER_MAPPER_INSTANCE::buildUserRsModel)
                 .collect(Collectors.toList());
     }
@@ -69,10 +65,8 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateUserException(DUPLICATE_USER_MSG);
     }
 
-    private User getAdminUser() {
-        Role roleAdmin = roleRepo.findByName("ADMIN").orElseThrow(() -> new DataNotFoundException("Role not found"));
-        return userRepo.findByRolesIn(Collections.singletonList(roleAdmin)).orElseThrow(
-                () -> new DataNotFoundException("User not found"));
+    private User getAdminUser(String adminEmail) {
+        return userRepo.findByEmail(adminEmail).orElseThrow(() -> new DataNotFoundException("Role is not found"));
     }
 
 }

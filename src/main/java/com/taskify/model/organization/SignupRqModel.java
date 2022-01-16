@@ -1,8 +1,13 @@
 package com.taskify.model.organization;
 
-import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,19 +17,43 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SignupRqModel {
-    @NotNull
+    @ApiModelProperty(name = "username", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String username;
-    @NotNull
+
+    @ApiModelProperty(name = "password", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String password;
-    @NotNull
+
+    @ApiModelProperty(name = "name", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String name;
+
+    @ApiModelProperty(name = "surname", dataType = "string")
+    @Size(max = 50)
     String surname;
-    @NotNull
+
+    @ApiModelProperty(name = "email", dataType = "string")
+    @NotBlank(message = "Fill email")
+    @Size(max = 20)
+    @Email(message = "Invalid email format")
     String email;
-    @NotNull
+
+    @ApiModelProperty(name = "organizationName", dataType = "string")
+    @NotBlank
+    @Size(max = 50)
     String organizationName;
-    @NotNull
+
+    @ApiModelProperty(name = "organizationPhoneNumber", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
     String organizationPhoneNumber;
-    @NotNull
+
+    @ApiModelProperty(name = "organizationAddress", dataType = "string")
+    @NotBlank
+    @Size(max = 50)
     String organizationAddress;
 }

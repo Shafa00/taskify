@@ -1,8 +1,13 @@
 package com.taskify.model.user;
 
 import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @Getter
@@ -12,9 +17,14 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConfirmOtpRqModel {
-    @NotNull
+    @ApiModelProperty(name = "email", dataType = "string")
+    @NotBlank
+    @Size(max = 20)
+    @Email(message = "email has invalid format")
     String email;
 
-    @NotNull
+    @ApiModelProperty(name = "otp", dataType = "string")
+    @NotBlank
+    @Size(max = 5)
     String otp;
 }

@@ -4,6 +4,8 @@ import com.taskify.utility.TaskStatus;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -29,7 +31,7 @@ public class Task {
     private String description;
 
     @Column(name = "task_deadline")
-    private String deadline;
+    private LocalDateTime deadline;
 
     @Column(name = "task_status")
     @Enumerated(value = EnumType.STRING)

@@ -1,9 +1,8 @@
 package com.taskify.model.user;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
@@ -13,8 +12,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConfirmOtpRsModel {
+    @ApiModelProperty(name = "email", dataType = "string")
     String email;
+
+    @ApiModelProperty(name = "otpId", dataType = "string")
     String otpId;
+
+    @ApiModelProperty(name = "otpStatus", dataType = "string")
     String otpStatus;
-    LocalDateTime otpCreationDateTime;
+
+    @ApiModelProperty(name = "otpCreationDateTime", dataType = "string")
+    String otpCreationDateTime;
 }

@@ -5,6 +5,8 @@ import com.taskify.entity.Task;
 import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
 import com.taskify.mapper.TaskMapper;
+import com.taskify.model.task.AssignTaskRqModel;
+import com.taskify.model.task.ChangeStatusRqModel;
 import com.taskify.model.task.TaskRqModel;
 import com.taskify.model.task.TaskRsModel;
 import com.taskify.repository.OrganizationRepository;
@@ -31,13 +33,11 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepo;
     private final UserRepository userRepo;
     private final OrganizationRepository organizationRepo;
-    private final TaskMapper taskMapper;
     private final MailSenderService mailSenderService;
 
     @Override
     public TaskRsModel addTask(TaskRqModel taskRqModel) {
-        Task task = taskMapper.buildTask(taskRqModel);
-        taskRepo.save(task);
+        Task task = TaskMapper.TASK_MAPPER_INSTANCE.buildTask(taskRqModel);
 
         List<User> users = taskRqModel.getUserIds().stream()
                 .map(this::getUserByUserId)
@@ -60,22 +60,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskRsModel> getTasksOfOrganization(String organizationId) {
-        Organization organization = organizationRepo.findByOrganizationId(organizationId)
-                .orElseThrow(() -> new DataNotFoundException("Organization not found"));
+    public List<TaskRsModel> getTasksOfOrganization(String email) {
+        User user = getUser(email);
 
-        return taskRepo.findAllByOrganization(organization).stream()
+        return taskRepo.findAllByOrganization(user.getOrganization()).stream()
                 .map(TaskMapper.TASK_MAPPER_INSTANCE::buildTaskResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public TaskRsModel assignTask(String taskId, List<String> userIds) {
-        Task task = taskRepo.findByTaskId(taskId)
-                .orElseThrow(() -> new DataNotFoundException(format("Task not found by given id %s", taskId)));
+    public TaskRsModel assignTask(AssignTaskRqModel assignTaskRqModel) {
+        Task task = taskRepo.findByTaskId(assignTaskRqModel.getTaskId())
+                .orElseThrow(() -> new DataNotFoundException(format("Task not found by given id %s", assignTaskRqModel.getTaskId())));
 
         List<User> users = new ArrayList<>();
-        userIds.forEach(userId ->
+        assignTaskRqModel.getUserIds().forEach(userId ->
                 {
                     if (task.getUsers().stream().noneMatch(user -> user.getUserId().equals(userId))) {
                         User user = userRepo.findByUserId(userId)
@@ -98,10 +97,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskRsModel changeStatus(String taskId, String status) {
-        Task task = taskRepo.findByTaskId(taskId)
-                .orElseThrow(() -> new DataNotFoundException(format("Task not found by given id %s", taskId)));
-        task.setStatus(TaskStatus.valueOf(status));
+    public TaskRsModel changeStatus(ChangeStatusRqModel changeStatusRqModel) {
+        Task task = taskRepo.findByTaskId(changeStatusRqModel.getTaskId())
+                .orElseThrow(() -> new DataNotFoundException(format("Task not found by given id %s", changeStatusRqModel.getTaskId())));
+        task.setStatus(TaskStatus.valueOf(changeStatusRqModel.getStatus()));
         taskRepo.save(task);
         return TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task);
     }
@@ -115,5 +114,9 @@ public class TaskServiceImpl implements TaskService {
                 .sendEmail(email, format(TASK_ASSIGNMENT_SUBJECT, task.getTitle()),
                         format(TASK_ASSIGNMENT_BODY, task.getDescription()));
 
+    }
+
+    private User getUser(String email) {
+        return userRepo.findByEmail(email).orElseThrow(() -> new DataNotFoundException("Role is not found"));
     }
 }
