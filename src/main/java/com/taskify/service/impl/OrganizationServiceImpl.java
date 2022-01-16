@@ -92,7 +92,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     private Role getRole() {
-        return roleRepo.findByName(UserRole.ADMIN.getRoleName()).orElseThrow(
+        return roleRepo.findByName("ROLE_ADMIN").orElseThrow(
                 () -> new DataNotFoundException(ROLE_NOT_FOUND_MSG));
     }
 }
