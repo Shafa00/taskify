@@ -5,7 +5,6 @@ import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
 import com.taskify.exception.ExpiredOtpException;
 import com.taskify.exception.InvalidOtpException;
-import com.taskify.mapper.OtpMapper;
 import com.taskify.model.user.ConfirmOtpRqModel;
 import com.taskify.model.user.ConfirmOtpRsModel;
 import com.taskify.repository.OtpRepository;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static com.taskify.mapper.OtpMapper.OTP_MAPPER_INSTANCE;
 import static com.taskify.utility.Constant.*;
 import static com.taskify.utility.MessageConstant.*;
 import static java.lang.String.format;
@@ -35,7 +35,7 @@ public class OtpServiceImpl implements OtpService {
             User user = userByOtp(otp);
             updateOtpAndUserValues(otp, user);
 
-            return OtpMapper.OTP_MAPPER_INSTANCE.buildOtpResponseModel(otp, user);
+            return OTP_MAPPER_INSTANCE.buildOtpResponseModel(otp, user);
         } else {
             throw new InvalidOtpException(INVALID_OTP_MSG);
         }

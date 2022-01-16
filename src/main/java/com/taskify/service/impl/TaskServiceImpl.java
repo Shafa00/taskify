@@ -4,7 +4,6 @@ import com.taskify.entity.Organization;
 import com.taskify.entity.Task;
 import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
-import com.taskify.mapper.TaskMapper;
 import com.taskify.model.task.AssignTaskRqModel;
 import com.taskify.model.task.ChangeStatusRqModel;
 import com.taskify.model.task.TaskRqModel;
@@ -24,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.taskify.utility.Constant.*;
+import static com.taskify.mapper.TaskMapper.TASK_MAPPER_INSTANCE;
+import static com.taskify.utility.Constant.TASK_ASSIGNMENT_BODY;
+import static com.taskify.utility.Constant.TASK_ASSIGNMENT_SUBJECT;
 import static com.taskify.utility.MessageConstant.*;
 import static java.lang.String.format;
 
@@ -42,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskRsModel addTask(TaskRqModel taskRqModel, String email) {
         User user = getUserByEmail(email);
 
-        Task task = TaskMapper.TASK_MAPPER_INSTANCE.buildTask(taskRqModel);
+        Task task = TASK_MAPPER_INSTANCE.buildTask(taskRqModel);
 
         List<User> users = taskRqModel.getUserIds().stream()
                 .map(this::getUserById)
@@ -52,10 +53,10 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(TaskStatus.TODO);
         task.setOrganization(getOrganization(user.getOrganization().getOrganizationId()));
         taskRepo.save(task);
-        log.info(TASK_CREATED_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task));
+        log.info(TASK_CREATED_MSG, TASK_MAPPER_INSTANCE.buildTaskResponse(task));
 
         sendTaskAssignmentMsg(users, task);
-        return TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task);
+        return TASK_MAPPER_INSTANCE.buildTaskResponse(task);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
         User user = getUserByEmail(email);
 
         return taskRepo.findAllByOrganization(user.getOrganization()).stream()
-                .map(TaskMapper.TASK_MAPPER_INSTANCE::buildTaskResponse)
+                .map(TASK_MAPPER_INSTANCE::buildTaskResponse)
                 .collect(Collectors.toList());
     }
 
@@ -83,9 +84,9 @@ public class TaskServiceImpl implements TaskService {
         sendTaskAssignmentMsg(users, task);
 
         taskRepo.save(task);
-        log.info(TASK_UPDATED_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task));
+        log.info(TASK_UPDATED_MSG, TASK_MAPPER_INSTANCE.buildTaskResponse(task));
 
-        return TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task);
+        return TASK_MAPPER_INSTANCE.buildTaskResponse(task);
     }
 
     @Override
@@ -95,8 +96,8 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(TaskStatus.valueOf(changeStatusRqModel.getStatus()));
         taskRepo.save(task);
 
-        log.info(TASK_UPDATED_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task));
-        return TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task);
+        log.info(TASK_UPDATED_MSG, TASK_MAPPER_INSTANCE.buildTaskResponse(task));
+        return TASK_MAPPER_INSTANCE.buildTaskResponse(task);
     }
 
     private User getUserById(String userId) {
@@ -114,9 +115,9 @@ public class TaskServiceImpl implements TaskService {
         users.forEach(user -> {
             try {
                 sendEmail(user.getEmail(), task);
-                log.info(TASK_ASSIGNMENT_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task), user.getUserId());
+                log.info(TASK_ASSIGNMENT_MSG, TASK_MAPPER_INSTANCE.buildTaskResponse(task), user.getUserId());
             } catch (MessagingException e) {
-                log.info(TASK_ASSIGNMENT_ERROR_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task), user.getUserId());
+                log.info(TASK_ASSIGNMENT_ERROR_MSG, TASK_MAPPER_INSTANCE.buildTaskResponse(task), user.getUserId());
             }
         });
     }

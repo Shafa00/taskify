@@ -38,7 +38,7 @@ public class OrganizationController {
 
     @ApiOperation("Sign up new organization and add admin user")
     @PostMapping(SIGNUP_URL)
-    public ResponseEntity<ResponseModel<SignupRsModel>> signUp(@Valid @RequestBody SignupRqModel signupRqModel) throws MessagingException {
+    public ResponseEntity<ResponseModel<SignupRsModel>> signup(@Valid @RequestBody SignupRqModel signupRqModel) throws MessagingException {
         ResponseEntity<ResponseModel<SignupRsModel>> response = ResponseEntity.ok(ResponseModel
                 .of(organizationService.signup(signupRqModel), HttpStatus.CREATED));
 

@@ -3,11 +3,9 @@ package com.taskify.service.impl;
 import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
 import com.taskify.exception.DuplicateUserException;
-import com.taskify.mapper.UserMapper;
 import com.taskify.model.user.UserAuthModel;
 import com.taskify.model.user.UserRqModel;
 import com.taskify.model.user.UserRsModel;
-import com.taskify.repository.RoleRepository;
 import com.taskify.repository.UserRepository;
 import com.taskify.service.UserService;
 import lombok.AllArgsConstructor;
@@ -19,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.taskify.mapper.UserMapper.USER_MAPPER_INSTANCE;
 import static com.taskify.utility.Constant.STATUS_ACTIVE;
 import static com.taskify.utility.MessageConstant.*;
 
@@ -46,20 +45,20 @@ public class UserServiceImpl implements UserService {
 
         checkEmailUniqueness(userRqModel.getEmail());
 
-        User user = UserMapper.USER_MAPPER_INSTANCE.buildUser(userRqModel);
+        User user = USER_MAPPER_INSTANCE.buildUser(userRqModel);
         user.setPassword(encoder.encode(userRqModel.getPassword()));
         user.setOrganization(adminUser.getOrganization());
         userRepo.save(user);
-        log.info(USER_CREATED_MSG, UserMapper.USER_MAPPER_INSTANCE.buildUserRsModel(user));
+        log.info(USER_CREATED_MSG, USER_MAPPER_INSTANCE.buildUserRsModel(user));
 
-        return UserMapper.USER_MAPPER_INSTANCE.buildUserRsModel(user);
+        return USER_MAPPER_INSTANCE.buildUserRsModel(user);
     }
 
     @Override
     public List<UserRsModel> getUsersOfOrganization(String email) {
         User adminUser = getAdminUser(email);
         return userRepo.findAllByOrganization(adminUser.getOrganization()).stream()
-                .map(UserMapper.USER_MAPPER_INSTANCE::buildUserRsModel)
+                .map(USER_MAPPER_INSTANCE::buildUserRsModel)
                 .collect(Collectors.toList());
     }
 
