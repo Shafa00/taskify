@@ -4,6 +4,7 @@ import com.taskify.entity.Task;
 import com.taskify.entity.User;
 import com.taskify.model.task.TaskRqModel;
 import com.taskify.model.task.TaskRsModel;
+import com.taskify.utility.CustomFormatter;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,11 +19,13 @@ public abstract class TaskMapper {
 
     public static TaskMapper TASK_MAPPER_INSTANCE = Mappers.getMapper(TaskMapper.class);
 
+    @Mapping(target = "deadline", ignore = true)
     public abstract Task buildTask(TaskRqModel taskRqModel);
 
     @AfterMapping
-    void setTaskId(@MappingTarget Task.TaskBuilder task) {
+    void setExtraFields(@MappingTarget Task.TaskBuilder task, TaskRqModel taskRqModel) {
         task.taskId(UUID.randomUUID().toString());
+        task.deadline(CustomFormatter.stringToLocalDateTime(taskRqModel.getDeadline()));
     }
 
     @Mapping(target = "userIds", ignore = true)
@@ -35,6 +38,4 @@ public abstract class TaskMapper {
                 .map(User::getUserId)
                 .collect(Collectors.toList()));
     }
-
-
 }

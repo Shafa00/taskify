@@ -1,5 +1,6 @@
 package com.taskify.service.impl;
 
+import com.taskify.entity.Organization;
 import com.taskify.entity.Task;
 import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
@@ -38,7 +39,9 @@ public class TaskServiceImpl implements TaskService {
     private final MailSenderService mailSenderService;
 
     @Override
-    public TaskRsModel addTask(TaskRqModel taskRqModel) {
+    public TaskRsModel addTask(TaskRqModel taskRqModel, String email) {
+        User user = getUserByEmail(email);
+
         Task task = TaskMapper.TASK_MAPPER_INSTANCE.buildTask(taskRqModel);
 
         List<User> users = taskRqModel.getUserIds().stream()
@@ -47,9 +50,9 @@ public class TaskServiceImpl implements TaskService {
 
         task.setUsers(users);
         task.setStatus(TaskStatus.TODO);
-        task.setOrganization(organizationRepo.findByOrganizationId(taskRqModel.getOrganizationId()).orElseThrow(() -> new DataNotFoundException("organization not found")));
+        task.setOrganization(getOrganization(user.getOrganization().getOrganizationId()));
         taskRepo.save(task);
-        log.info(TASK_CREATED_MSG, task);
+        log.info(TASK_CREATED_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task));
 
         sendTaskAssignmentMsg(users, task);
         return TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task);
@@ -80,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
         sendTaskAssignmentMsg(users, task);
 
         taskRepo.save(task);
-        log.info(TASK_UPDATED_MSG, task);
+        log.info(TASK_UPDATED_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task));
 
         return TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task);
     }
@@ -92,7 +95,7 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(TaskStatus.valueOf(changeStatusRqModel.getStatus()));
         taskRepo.save(task);
 
-        log.info(TASK_UPDATED_MSG, task);
+        log.info(TASK_UPDATED_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task));
         return TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task);
     }
 
@@ -111,9 +114,9 @@ public class TaskServiceImpl implements TaskService {
         users.forEach(user -> {
             try {
                 sendEmail(user.getEmail(), task);
-                log.info(TASK_ASSIGNMENT_MSG, task, user);
+                log.info(TASK_ASSIGNMENT_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task), user.getUserId());
             } catch (MessagingException e) {
-                log.info(TASK_ASSIGNMENT_ERROR_MSG, task, user);
+                log.info(TASK_ASSIGNMENT_ERROR_MSG, TaskMapper.TASK_MAPPER_INSTANCE.buildTaskResponse(task), user.getUserId());
             }
         });
     }
@@ -127,4 +130,8 @@ public class TaskServiceImpl implements TaskService {
         return taskRepo.findByTaskId(taskId).orElseThrow(
                 () -> new DataNotFoundException(format(TASK_NOT_FOUND_MSG, taskId)));
     }
+
+    private Organization getOrganization(String organizationId) {
+        return organizationRepo.findByOrganizationId(organizationId)
+                .orElseThrow(() -> new DataNotFoundException(ORGANIZATION_NOT_FOUND_MSG));    }
 }

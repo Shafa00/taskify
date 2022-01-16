@@ -12,6 +12,7 @@ public class MessageConstant {
     public static final String USER_NOT_FOUND_BY_EMAIL_MSG = "User is not found by given email: %s";
     public static final String TASK_NOT_FOUND_MSG = "Task is not found by given id: %s";
     public static final String ROLE_NOT_FOUND_MSG = "Role is not found";
+    public static final String ORGANIZATION_NOT_FOUND_MSG = "Organization is not found";
     public static final String RESPONSE_MSG = "Request URL: '{}', response body: '{}'";
     public static final String ORGANIZATION_CREATED_MSG = "Organization created -> {}";
     public static final String USER_CREATED_MSG = "User created -> {}";
@@ -20,6 +21,8 @@ public class MessageConstant {
     public static final String TASK_UPDATED_MSG = "Task updated -> {}";
     public static final String TASK_ASSIGNMENT_MSG = "Task assigned -> {} to user -> {}";
     public static final String TASK_ASSIGNMENT_ERROR_MSG = "Task can to be assigned -> {} to user -> {}";
+    public static final String INVALID_DATE_TIME_FORMAT_MSG = "DateTime should be in following format: 'yyyy-MM-dd HH:mm'";
+
 
 
 

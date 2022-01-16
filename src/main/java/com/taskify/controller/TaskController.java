@@ -35,9 +35,11 @@ public class TaskController {
 
     @ApiOperation("Add task and assign to initial users if needed")
     @PostMapping(ADD_TASK_URL)
-    public ResponseEntity<ResponseModel<TaskRsModel>> addTask(@Valid @RequestBody TaskRqModel taskRqModel) {
+    public ResponseEntity<ResponseModel<TaskRsModel>> addTask(@Valid @RequestBody TaskRqModel taskRqModel, Authentication auth) {
+        String email = ((UserDetails) auth.getPrincipal()).getUsername();
+
         ResponseEntity<ResponseModel<TaskRsModel>> response = ResponseEntity.ok(ResponseModel
-                .of(taskService.addTask(taskRqModel), HttpStatus.CREATED));
+                .of(taskService.addTask(taskRqModel, email), HttpStatus.CREATED));
 
         log.info(RESPONSE_MSG, ADD_TASK_URL, response);
         return response;

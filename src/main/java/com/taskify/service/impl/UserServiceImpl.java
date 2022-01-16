@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encoder.encode(userRqModel.getPassword()));
         user.setOrganization(adminUser.getOrganization());
         userRepo.save(user);
-        log.info(USER_CREATED_MSG, user);
+        log.info(USER_CREATED_MSG, UserMapper.USER_MAPPER_INSTANCE.buildUserRsModel(user));
 
         return UserMapper.USER_MAPPER_INSTANCE.buildUserRsModel(user);
     }

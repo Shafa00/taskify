@@ -8,7 +8,7 @@ import com.taskify.model.task.TaskRsModel;
 import java.util.List;
 
 public interface TaskService {
-    TaskRsModel addTask(TaskRqModel taskRqModel);
+    TaskRsModel addTask(TaskRqModel taskRqModel, String email);
     List<TaskRsModel> getTasksOfOrganization(String email);
     TaskRsModel assignTask(AssignTaskRqModel assignTaskRqModel);
     TaskRsModel changeStatus(ChangeStatusRqModel changeStatusRqModel);

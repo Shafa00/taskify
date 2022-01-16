@@ -32,12 +32,6 @@ public class TaskRqModel {
     String deadline;
 
     @ApiModelProperty(name = "userIds", dataType = "List")
-    @NotBlank
     @Size(max = 50)
     List<String> userIds;
-
-    @ApiModelProperty(name = "organizationId", dataType = "string")
-    @NotBlank
-    @Size(max = 50)
-    String organizationId;
 }

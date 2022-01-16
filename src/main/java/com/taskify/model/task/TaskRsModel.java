@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,8 +24,8 @@ public class TaskRsModel {
     @ApiModelProperty(name = "description", dataType = "string")
     String description;
 
-    @ApiModelProperty(name = "deadline", dataType = "string")
-    String deadline;
+    @ApiModelProperty(name = "deadline", dataType = "localDateTime")
+    LocalDateTime deadline;
 
     @ApiModelProperty(name = "status", dataType = "string")
     String status;

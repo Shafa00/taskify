@@ -20,8 +20,14 @@ public abstract class UserMapper {
         user.userId(UUID.randomUUID().toString());
     }
 
-    @Mapping(target = "organizationId", source = "organization.organizationId")
+    @Mapping(target = "organizationId", ignore = true)
     public abstract UserRsModel buildUserRsModel(User user);
+
+    @AfterMapping
+    void mapUserIds(@MappingTarget UserRsModel.UserRsModelBuilder userRsModel, User user) {
+        userRsModel.organizationId(user.getOrganization().getOrganizationId());
+    }
+
 
 
 }

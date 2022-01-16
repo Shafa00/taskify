@@ -7,6 +7,7 @@ import com.taskify.entity.User;
 import com.taskify.exception.DataNotFoundException;
 import com.taskify.exception.DuplicateUserException;
 import com.taskify.mapper.OrganizationMapper;
+import com.taskify.mapper.UserMapper;
 import com.taskify.model.organization.SignupRqModel;
 import com.taskify.model.organization.SignupRsModel;
 import com.taskify.repository.OrganizationRepository;
@@ -52,14 +53,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization organization = organizationMapper.buildOrganization(signupRqModel);
         organizationRepo.save(organization);
-        log.info(ORGANIZATION_CREATED_MSG, organization);
+        log.info(ORGANIZATION_CREATED_MSG, organization.getOrganizationId());
 
         User adminUser = organizationMapper.buildUser(signupRqModel);
         adminUser.setOrganization(organization);
         adminUser.setPassword(encoder.encode(signupRqModel.getPassword()));
         adminUser.setRoles(Collections.singletonList(getRole()));
         userRepo.save(adminUser);
-        log.info(USER_CREATED_MSG, adminUser);
+        log.info(USER_CREATED_MSG, UserMapper.USER_MAPPER_INSTANCE.buildUserRsModel(adminUser));
 
         String otp = generateOtp();
         otpRepo.save(buildOtp(otp, adminUser));
