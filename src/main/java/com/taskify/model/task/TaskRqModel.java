@@ -20,7 +20,7 @@ public class TaskRqModel {
     String description;
     String deadline;
     @NotNull
-    String status;
-    @NotNull
     List<String> userIds;
+    @NotNull
+    String organizationId;
 }

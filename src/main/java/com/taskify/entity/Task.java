@@ -35,7 +35,11 @@ public class Task {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus status;
 
-    @OneToMany(mappedBy = "task")
+    @ManyToMany
+    @JoinTable(
+            name = "rel_user_task",
+            joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> users;
 
     @ManyToOne

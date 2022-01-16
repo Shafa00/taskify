@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TaskService {
     TaskRsModel addTask(TaskRqModel taskRqModel);
-    List<TaskRsModel> getTasks();
+    List<TaskRsModel> getTasksOfOrganization(String organizationId);
     TaskRsModel assignTask(String taskId, List<String> userIds);
-    TaskRsModel changeStatus(String status);
+    TaskRsModel changeStatus(String taskId, String status);
 }

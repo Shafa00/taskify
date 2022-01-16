@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,12 +53,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
     private Organization organization;
 
-    @ManyToOne
-    @JoinTable(
-            name = "rel_task_user",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
-    private Task task;
+    @ManyToMany(mappedBy = "users")
+    private List<Task> tasks;
 
     @OneToOne(mappedBy = "user")
     private Otp otp;

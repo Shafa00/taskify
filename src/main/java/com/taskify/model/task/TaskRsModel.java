@@ -19,4 +19,5 @@ public class TaskRsModel {
     String deadline;
     String status;
     List<String> userIds;
+    String organizationId;
 }

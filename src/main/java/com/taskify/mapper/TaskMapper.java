@@ -5,6 +5,7 @@ import com.taskify.model.task.TaskRqModel;
 import com.taskify.model.task.TaskRsModel;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
@@ -22,6 +23,7 @@ public abstract class TaskMapper {
         task.taskId(UUID.randomUUID().toString());
     }
 
+    @Mapping(target = "organizationId", source = "organization.organizationId")
     public abstract TaskRsModel buildTaskResponse(Task task);
 
 
