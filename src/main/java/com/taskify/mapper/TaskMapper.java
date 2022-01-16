@@ -1,6 +1,7 @@
 package com.taskify.mapper;
 
 import com.taskify.entity.Task;
+import com.taskify.entity.User;
 import com.taskify.model.task.TaskRqModel;
 import com.taskify.model.task.TaskRsModel;
 import org.mapstruct.AfterMapping;
@@ -10,6 +11,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Mapper
 public abstract class TaskMapper {
@@ -23,8 +25,16 @@ public abstract class TaskMapper {
         task.taskId(UUID.randomUUID().toString());
     }
 
+    @Mapping(target = "userIds", ignore = true)
     @Mapping(target = "organizationId", source = "organization.organizationId")
     public abstract TaskRsModel buildTaskResponse(Task task);
+
+    @AfterMapping
+    void mapUserIds(@MappingTarget TaskRsModel.TaskRsModelBuilder taskRsModel, Task task) {
+        taskRsModel.userIds(task.getUsers().stream()
+                .map(User::getUserId)
+                .collect(Collectors.toList()));
+    }
 
 
 }

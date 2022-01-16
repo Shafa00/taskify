@@ -38,7 +38,7 @@ public class SignupRqModel {
 
     @ApiModelProperty(name = "email", dataType = "string")
     @NotBlank(message = "Fill email")
-    @Size(max = 20)
+    @Size(max = 50)
     @Email(message = "Invalid email format")
     String email;
 
@@ -49,11 +49,11 @@ public class SignupRqModel {
 
     @ApiModelProperty(name = "organizationPhoneNumber", dataType = "string")
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     String organizationPhoneNumber;
 
     @ApiModelProperty(name = "organizationAddress", dataType = "string")
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 255)
     String organizationAddress;
 }

@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import static com.taskify.utility.Constant.*;
 import static com.taskify.utility.MessageConstant.*;
+import static com.taskify.utility.UrlConstant.SIGN_IN_URL;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final UserService userService;
@@ -34,8 +35,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.userService = userService;
         this.jwtService = jwtService;
         super.setAuthenticationManager(authManager);
-        //todo
-        super.setFilterProcessesUrl("/sign-in");
+        super.setFilterProcessesUrl(SIGN_IN_URL);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String email = ((UserDetails) authResult.getPrincipal()).getUsername();
 
         UserAuthModel userAuthModel = userService.findAuthModelByEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+                new UsernameNotFoundException(String.format(USER_NOT_FOUND_BY_EMAIL_MSG, email)));
 
         String token = jwtService.generateToken(userAuthModel.getId());
 

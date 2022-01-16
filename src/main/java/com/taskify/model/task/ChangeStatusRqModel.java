@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 public class ChangeStatusRqModel {
     @ApiModelProperty(name = "taskId", dataType = "string")
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     String taskId;
 
     @ApiModelProperty(name = "userIds", dataType = "string")

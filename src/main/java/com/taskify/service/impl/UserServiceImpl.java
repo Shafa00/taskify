@@ -11,6 +11,7 @@ import com.taskify.repository.RoleRepository;
 import com.taskify.repository.UserRepository;
 import com.taskify.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.taskify.utility.Constant.STATUS_ACTIVE;
-import static com.taskify.utility.MessageConstant.DUPLICATE_USER_MSG;
+import static com.taskify.utility.MessageConstant.*;
 
+@Log4j2
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encoder.encode(userRqModel.getPassword()));
         user.setOrganization(adminUser.getOrganization());
         userRepo.save(user);
+        log.info(USER_CREATED_MSG, user);
 
         return UserMapper.USER_MAPPER_INSTANCE.buildUserRsModel(user);
     }
@@ -66,7 +69,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private User getAdminUser(String adminEmail) {
-        return userRepo.findByEmail(adminEmail).orElseThrow(() -> new DataNotFoundException("Role is not found"));
+        return userRepo.findByEmail(adminEmail).orElseThrow(
+                () -> new DataNotFoundException(String.format(USER_NOT_FOUND_BY_EMAIL_MSG, adminEmail)));
     }
 
 }

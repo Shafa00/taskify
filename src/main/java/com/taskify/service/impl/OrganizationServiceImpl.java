@@ -15,7 +15,9 @@ import com.taskify.repository.RoleRepository;
 import com.taskify.repository.UserRepository;
 import com.taskify.service.OrganizationService;
 import com.taskify.utility.MailSenderService;
+import com.taskify.utility.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +29,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import static com.taskify.utility.Constant.*;
-import static com.taskify.utility.MessageConstant.DUPLICATE_USER_MSG;
+import static com.taskify.utility.MessageConstant.*;
 import static java.lang.String.format;
 
+@Log4j2
 @AllArgsConstructor
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -49,15 +52,18 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization organization = organizationMapper.buildOrganization(signupRqModel);
         organizationRepo.save(organization);
+        log.info(ORGANIZATION_CREATED_MSG, organization);
 
         User adminUser = organizationMapper.buildUser(signupRqModel);
         adminUser.setOrganization(organization);
         adminUser.setPassword(encoder.encode(signupRqModel.getPassword()));
         adminUser.setRoles(Collections.singletonList(getRole()));
         userRepo.save(adminUser);
+        log.info(USER_CREATED_MSG, adminUser);
 
         String otp = generateOtp();
         otpRepo.save(buildOtp(otp, adminUser));
+        log.info(OTP_CREATED_MSG, otp);
 
         mailSenderService
                 .sendEmail(signupRqModel.getEmail(), OTP_CONFIRMATION_SUBJECT,
@@ -86,6 +92,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     private Role getRole() {
-        return roleRepo.findByName("ADMIN").orElseThrow(() -> new DataNotFoundException("Role not found"));
+        return roleRepo.findByName(UserRole.ADMIN.getRoleName()).orElseThrow(
+                () -> new DataNotFoundException(ROLE_NOT_FOUND_MSG));
     }
 }

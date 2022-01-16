@@ -9,6 +9,7 @@ import com.taskify.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,36 +21,56 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.taskify.utility.MessageConstant.RESPONSE_MSG;
+import static com.taskify.utility.UrlConstant.*;
+
 @AllArgsConstructor
 @RestController
 @Api(produces = MediaType.APPLICATION_JSON_VALUE, tags = "Task")
 @Validated
+@Log4j2
 public class TaskController {
 
     private final TaskService taskService;
 
     @ApiOperation("Add task and assign to initial users if needed")
-    @PostMapping("/add-task")
+    @PostMapping(ADD_TASK_URL)
     public ResponseEntity<ResponseModel<TaskRsModel>> addTask(@Valid @RequestBody TaskRqModel taskRqModel) {
-        return ResponseEntity.ok(ResponseModel.of(taskService.addTask(taskRqModel), HttpStatus.CREATED));
+        ResponseEntity<ResponseModel<TaskRsModel>> response = ResponseEntity.ok(ResponseModel
+                .of(taskService.addTask(taskRqModel), HttpStatus.CREATED));
+
+        log.info(RESPONSE_MSG, ADD_TASK_URL, response);
+        return response;
     }
 
     @ApiOperation("Get tasks of organization")
-    @GetMapping("/get-tasks")
+    @GetMapping(GET_TASKS_URL)
     public ResponseEntity<ResponseModel<List<TaskRsModel>>> getTasksOfOrganization(Authentication auth) {
         String email = ((UserDetails) auth.getPrincipal()).getUsername();
-        return ResponseEntity.ok(ResponseModel.of(taskService.getTasksOfOrganization(email), HttpStatus.OK));
+        ResponseEntity<ResponseModel<List<TaskRsModel>>> response = ResponseEntity.ok(ResponseModel
+                .of(taskService.getTasksOfOrganization(email), HttpStatus.OK));
+
+        log.info(RESPONSE_MSG, GET_TASKS_URL, response);
+        return response;
     }
 
     @ApiOperation("Assign tasks to users")
-    @PostMapping("/assign-task")
+    @PostMapping(ASSIGN_TASK_URL)
     public ResponseEntity<ResponseModel<TaskRsModel>> assignTask(@Valid @RequestBody AssignTaskRqModel assignTaskRqModel) {
-        return ResponseEntity.ok(ResponseModel.of(taskService.assignTask(assignTaskRqModel), HttpStatus.OK));
+        ResponseEntity<ResponseModel<TaskRsModel>> response = ResponseEntity.ok(ResponseModel
+                .of(taskService.assignTask(assignTaskRqModel), HttpStatus.OK));
+
+        log.info(RESPONSE_MSG, ASSIGN_TASK_URL, response);
+        return response;
     }
 
     @ApiOperation("Change status of tasks")
-    @PostMapping("/change-status")
+    @PostMapping(CHANGE_STATUS_URL)
     public ResponseEntity<ResponseModel<TaskRsModel>> changeStatusOfTask(@Valid @RequestBody ChangeStatusRqModel changeStatusRqModel) {
-        return ResponseEntity.ok(ResponseModel.of(taskService.changeStatus(changeStatusRqModel), HttpStatus.OK));
+        ResponseEntity<ResponseModel<TaskRsModel>> response = ResponseEntity.ok(ResponseModel
+                .of(taskService.changeStatus(changeStatusRqModel), HttpStatus.OK));
+
+        log.info(RESPONSE_MSG, CHANGE_STATUS_URL, response);
+        return response;
     }
 }

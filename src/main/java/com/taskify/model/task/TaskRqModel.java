@@ -23,7 +23,7 @@ public class TaskRqModel {
 
     @ApiModelProperty(name = "description", dataType = "string")
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 255)
     String description;
 
     @ApiModelProperty(name = "deadline", dataType = "string")

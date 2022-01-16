@@ -18,7 +18,7 @@ import java.util.List;
 public class AssignTaskRqModel {
     @ApiModelProperty(name = "taskId", dataType = "string")
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     String taskId;
 
     @ApiModelProperty(name = "userIds", dataType = "string")

@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +55,7 @@ public class User {
     private Organization organization;
 
     @ManyToMany(mappedBy = "users")
+    @ToString.Exclude
     private List<Task> tasks;
 
     @OneToOne(mappedBy = "user")

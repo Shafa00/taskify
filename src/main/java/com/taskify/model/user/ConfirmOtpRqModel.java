@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 public class ConfirmOtpRqModel {
     @ApiModelProperty(name = "email", dataType = "string")
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     @Email(message = "email has invalid format")
     String email;
 

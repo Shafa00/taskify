@@ -4,6 +4,7 @@ import com.taskify.security.AuthenticationFilter;
 import com.taskify.security.AuthorizationFilter;
 import com.taskify.security.JwtService;
 import com.taskify.service.UserService;
+import com.taskify.utility.UserRole;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -13,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.taskify.utility.UrlConstant.*;
 
 @AllArgsConstructor
 @EnableWebSecurity
@@ -32,9 +35,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
-                .antMatchers(HttpMethod.POST, "/confirm-otp").permitAll()
-                .antMatchers(HttpMethod.POST, "/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, SIGNUP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, CONFIRM_OTP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, SIGN_IN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, ADD_USER_URL).hasRole(UserRole.ADMIN.getRoleName())
+
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/swagger-ui.html/**").permitAll()
                 .antMatchers("/v2/api-docs/**").permitAll()

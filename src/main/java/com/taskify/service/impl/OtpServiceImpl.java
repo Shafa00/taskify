@@ -42,7 +42,8 @@ public class OtpServiceImpl implements OtpService {
     }
 
     private Otp otpByValue(ConfirmOtpRqModel requestBody) {
-        return otpRepo.findByOtp(requestBody.getOtp()).orElseThrow(() -> new InvalidOtpException(INVALID_OTP_MSG));
+        return otpRepo.findByOtp(requestBody.getOtp()).orElseThrow(
+                () -> new InvalidOtpException(INVALID_OTP_MSG));
     }
 
     private User userByOtp(Otp otp) {
@@ -57,7 +58,8 @@ public class OtpServiceImpl implements OtpService {
     }
 
     private void checkOtpAvailability(Otp otp) {
-        if (otp.getDateTime().isBefore(LocalDateTime.now().minusMinutes(2)) || !otp.getStatus().equals(STATUS_NEW)) {
+        if (otp.getDateTime().isBefore(LocalDateTime.now().minusMinutes(2))
+                || !otp.getStatus().equals(STATUS_NEW)) {
             throw new ExpiredOtpException(EXPIRED_OTP_MSG);
         }
     }
