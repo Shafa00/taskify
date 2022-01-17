@@ -1,5 +1,9 @@
 # e-taskify
 
+All information and endpoints can be discovered in following swagger URL.
+
+http://localhost:8090/swagger-ui.html
+
 Extra information:
 2 additional endpoint have been added which were not considered in requirement.
 
